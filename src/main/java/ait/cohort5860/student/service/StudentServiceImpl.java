@@ -8,17 +8,17 @@ import ait.cohort5860.student.dto.StudentUpdateDto;
 import ait.cohort5860.student.dto.exceptions.NotFoundException;
 import ait.cohort5860.student.model.Student;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
-       private final StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     @Override
     public Boolean addStudent(StudentCredentialsDto studentCredentialsDto) {
@@ -43,34 +43,24 @@ public class StudentServiceImpl implements StudentService {
         return studentDto;
     }
 
-//    @Override
-//    public StudentCredentialsDto updateStudentById(Long id, StudentUpdateDto studentUpdateDto) {
-//        Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
-//        Student updateStudent = new Student(id,
-//                studentUpdateDto.getName() == null ?
-//                        student.getName() : studentUpdateDto.getName(),
-//                studentUpdateDto.getPassword() == null ?
-//                        student.getPassword() : studentUpdateDto.getPassword());
-//        studentRepository.save(updateStudent);
-//        return new StudentCredentialsDto(id, updateStudent.getName(), updateStudent.getPassword());
-//    }
-
     @Override
     public StudentCredentialsDto updateStudentById(Long id, StudentUpdateDto studentUpdateDto) {
         Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
-        if (studentUpdateDto.getName() != null) {
-            student.setName(studentUpdateDto.getName());
-        }
-        if (studentUpdateDto.getPassword() != null) {
-            student.setPassword(studentUpdateDto.getPassword());
-        }
-        return new StudentCredentialsDto(student.getId(), student.getName(), student.getPassword());
+        Student updateStudent = new Student(id,
+                studentUpdateDto.getName() == null ?
+                        student.getName() : studentUpdateDto.getName(),
+                studentUpdateDto.getPassword() == null ?
+                        student.getPassword() : studentUpdateDto.getPassword());
+        studentRepository.save(updateStudent);
+        return new StudentCredentialsDto(id, updateStudent.getName(), updateStudent.getPassword());
     }
 
     @Override
     public Boolean addScore(Long id, ScoreDto scoreDto) {
         Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
-        return student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        Boolean res = student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        studentRepository.save(student);
+        return res;
     }
 
     @Override
