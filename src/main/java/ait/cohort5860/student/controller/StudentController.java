@@ -5,6 +5,7 @@ import ait.cohort5860.student.dto.StudentCredentialsDto;
 import ait.cohort5860.student.dto.StudentDto;
 import ait.cohort5860.student.dto.StudentUpdateDto;
 import ait.cohort5860.student.service.StudentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentController {
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
 
     @PostMapping("/student")
     public Boolean addStudent(@RequestBody StudentCredentialsDto studentCredentialsDto) {
@@ -22,7 +23,7 @@ public class StudentController {
     }
 
     @GetMapping("/student/{id}")
-    public StudentDto getStudentById( @PathVariable Long id) {
+    public StudentDto getStudentById(@PathVariable Long id) {
         return studentService.findStudentById(id);
     }
 
@@ -36,7 +37,7 @@ public class StudentController {
         return studentService.updateStudentById(id, studentUpdateDto);
     }
 
-  @PatchMapping("/score/student/{id}")
+    @PatchMapping("/score/student/{id}")
     public Boolean addScore(@PathVariable Long id, @RequestBody ScoreDto scoreDto) {
         return studentService.addScore(id, scoreDto);
     }
@@ -46,7 +47,7 @@ public class StudentController {
         return studentService.findStudentsByName(name);
     }
 
-   @GetMapping("/quantity/students")
+    @GetMapping("/quantity/students")
     public Long countStudentsByName(@RequestParam Set<String> names) {
         return studentService.countStudentsByName(names);
     }
