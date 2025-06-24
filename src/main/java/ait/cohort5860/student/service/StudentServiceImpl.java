@@ -8,13 +8,12 @@ import ait.cohort5860.student.dto.StudentUpdateDto;
 import ait.cohort5860.student.dto.exceptions.NotFoundException;
 import ait.cohort5860.student.model.Student;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
@@ -38,9 +37,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto removeStudentById(Long id) {
-        StudentDto studentDto = findStudentById(id);
-        studentRepository.deleteById(studentDto.getId());
-        return studentDto;
+        Student student = studentRepository.findById(id).orElseThrow(NotFoundException::new);
+        studentRepository.deleteById(id);
+        return new StudentDto(student.getId(), student.getName(), student.getScores());
     }
 
     @Override
@@ -87,7 +86,7 @@ public class StudentServiceImpl implements StudentService {
         List<Student> students = studentRepository.findAll();
         List<StudentDto> studentDtoList = students.stream()
                 .filter(student -> student.getScores().containsKey(examName)
-                        && student.getScores().get(examName) >= minScore)
+                        && student.getScores().get(examName) > minScore)
                 .map(student -> new StudentDto(student.getId(), student.getName(), student.getScores()))
                 .toList();
         return studentDtoList;
