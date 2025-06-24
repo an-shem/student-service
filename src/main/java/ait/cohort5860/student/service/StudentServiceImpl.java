@@ -74,13 +74,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDto> findStudentsByName(String name) {
-        List<Student> students = studentRepository.findAll();
-        List<StudentDto> studentDtoList = students.stream()
+       return studentRepository.findAll().stream()
                 .filter(student -> name.equalsIgnoreCase(student.getName()))
                 .map(student -> new StudentDto(student.getId(), student.getName(), student.getScores()))
                 .toList();
-        return studentDtoList;
-    }
+           }
 
     @Override
     public Long countStudentsByName(Set<String> names) {
