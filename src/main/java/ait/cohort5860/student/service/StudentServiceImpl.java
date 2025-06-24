@@ -64,31 +64,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDto> findStudentsByName(String name) {
-        List<Student> students = studentRepository.findAll();
-        List<StudentDto> studentDtoList = students.stream()
-                .filter(student -> student.getName().toLowerCase().equals(name))
+        return studentRepository.findByNameIgnoreCase(name)
                 .map(student -> new StudentDto(student.getId(), student.getName(), student.getScores()))
                 .toList();
-        return studentDtoList;
     }
 
     @Override
     public Long countStudentsByName(Set<String> names) {
-        List<Student> students = studentRepository.findAll();
-        Long quantity = students.stream()
-                .filter(student -> names.contains(student.getName()))
-                .count();
-        return quantity;
+        return studentRepository.countStudentsByNameIgnoreCaseIn(names);
     }
 
     @Override
     public List<StudentDto> findStudentsByExamName(String examName, Integer minScore) {
-        List<Student> students = studentRepository.findAll();
-        List<StudentDto> studentDtoList = students.stream()
-                .filter(student -> student.getScores().containsKey(examName)
-                        && student.getScores().get(examName) > minScore)
+        return studentRepository.findByExamAndScoresGreaterThan(examName, minScore)
                 .map(student -> new StudentDto(student.getId(), student.getName(), student.getScores()))
                 .toList();
-        return studentDtoList;
     }
 }
