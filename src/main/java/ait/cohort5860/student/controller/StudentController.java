@@ -6,7 +6,6 @@ import ait.cohort5860.student.dto.StudentDto;
 import ait.cohort5860.student.dto.StudentUpdateDto;
 import ait.cohort5860.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,18 +22,18 @@ public class StudentController {
     }
 
     @GetMapping("/student/{id}")
-    public StudentDto getStudentById(@PathVariable Long id) {
-        return studentService.findStudentById(id);
+    public StudentDto findStudent(@PathVariable Long id) {
+        return studentService.findStudent(id);
     }
 
     @DeleteMapping("/student/{id}")
-    public StudentDto removeStudentById(@PathVariable Long id) {
-        return studentService.removeStudentById(id);
+    public StudentDto removeStudent(@PathVariable Long id) {
+        return studentService.removeStudent(id);
     }
 
     @PatchMapping("/student/{id}")
-    public StudentCredentialsDto updateStudentById(@PathVariable Long id, @RequestBody StudentUpdateDto studentUpdateDto) {
-        return studentService.updateStudentById(id, studentUpdateDto);
+    public StudentCredentialsDto updateStudent(@PathVariable Long id, @RequestBody StudentUpdateDto studentUpdateDto) {
+        return studentService.updateStudent(id, studentUpdateDto);
     }
 
     @PatchMapping("/score/student/{id}")
@@ -48,12 +47,12 @@ public class StudentController {
     }
 
     @GetMapping("/quantity/students")
-    public Long countStudentsByName(@RequestParam Set<String> names) {
-        return studentService.countStudentsByName(names);
+    public Long countStudentsByNames(@RequestParam Set<String> names) {
+        return studentService.countStudentsByNames(names);
     }
 
     @GetMapping("/students/exam/{examName}/minscore/{minScore}")
-    public List<StudentDto> findStudentsByExamName(@PathVariable String examName, @PathVariable Integer minScore) {
-        return studentService.findStudentsByExamName(examName, minScore);
+    public List<StudentDto> findStudentsByExamNameMinScore(@PathVariable String examName, @PathVariable Integer minScore) {
+        return studentService.findStudentsByExamNameMinScore(examName, minScore);
     }
 }

@@ -14,3 +14,4 @@ public class StudentDto {
     private String name;
     private Map<String, Integer> scores;
 }
+

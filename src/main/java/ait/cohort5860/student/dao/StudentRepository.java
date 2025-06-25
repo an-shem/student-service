@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 public interface StudentRepository extends MongoRepository<Student, Long> {
     Stream<Student> findByNameIgnoreCase(String name);
-    Long countStudentsByNameIgnoreCaseIn(Set<String> names);
 
-    @Query("{'scores.Math': {'$gt':  90}}")
-    Stream<Student> findByExamAndScoresGreaterThan(String examName, Integer score);
+    @Query("{'scores.?0': {'$gt': ?1}}")
+    Stream<Student> findByExamAndScoreGreaterThan(String examName, Integer score);
 
+    Long countByNameIgnoreCaseIn(Set<String> names);
 }
